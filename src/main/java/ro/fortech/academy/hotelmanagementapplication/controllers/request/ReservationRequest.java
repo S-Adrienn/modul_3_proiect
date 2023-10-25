@@ -2,7 +2,7 @@ package ro.fortech.academy.hotelmanagementapplication.controllers.request;
 
 import java.time.LocalDate;
 
-public class CreateReservationRequest {
+public class ReservationRequest {
 
     private LocalDate dateOfCheckIn;
     private LocalDate dateOfCheckOut;
@@ -11,7 +11,7 @@ public class CreateReservationRequest {
     private Double totalPrice;
     private Long roomId;
 
-    public CreateReservationRequest() {
+    public ReservationRequest() {
     }
 
     public LocalDate getDateOfCheckIn() {
