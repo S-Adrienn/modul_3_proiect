@@ -3,7 +3,7 @@ package ro.fortech.academy.hotelmanagementapplication.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ro.fortech.academy.hotelmanagementapplication.controllers.request.CreateReservationRequest;
+import ro.fortech.academy.hotelmanagementapplication.controllers.request.ReservationRequest;
 import ro.fortech.academy.hotelmanagementapplication.controllers.response.GetAllReservationsResponse;
 import ro.fortech.academy.hotelmanagementapplication.entities.Reservation;
 import ro.fortech.academy.hotelmanagementapplication.services.ReservationService;
@@ -23,19 +23,11 @@ public class ReservationController {
     }
 
     @PostMapping
-    public void createReservation(@RequestBody CreateReservationRequest requestBody) {
-        Reservation newReservation = new Reservation();
-        newReservation.setDateOfCheckIn(requestBody.getDateOfCheckIn());
-        newReservation.setDateOfCheckOut(requestBody.getDateOfCheckOut());
-        newReservation.setGuestName(requestBody.getGuestName());
-        newReservation.setPhoneNumber(requestBody.getPhoneNumber());
-        newReservation.setTotalPrice(requestBody.getTotalPrice());
-        newReservation.setDeleted(false);
-        newReservation.setRoomId(requestBody.getRoomId());
-        reservationService.addReservation(newReservation);
+    public void createReservation(@RequestBody ReservationRequest requestBody) {
+        reservationService.addReservation(requestBody);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
         try {
             Reservation responseBody = reservationService.getReservationById(id);
@@ -52,8 +44,8 @@ public class ReservationController {
         return ResponseEntity.ok(responseBody);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<Reservation> updateReservation(@PathVariable Long id, @RequestBody CreateReservationRequest requestBody) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Reservation> updateReservation(@PathVariable Long id, @RequestBody ReservationRequest requestBody) {
         try {
             Reservation responseBody = reservationService.updateReservation(id, requestBody);
             return ResponseEntity.ok(responseBody);
@@ -62,7 +54,7 @@ public class ReservationController {
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Reservation> deleteReservationById(@PathVariable Long id) {
         try {
             Reservation responseBody = reservationService.deleteReservationById(id);
