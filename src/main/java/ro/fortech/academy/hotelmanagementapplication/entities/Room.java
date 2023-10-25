@@ -12,6 +12,7 @@ public class Room {
     @Column(name = "id")
     private Long id;
 
+    @Pattern(regexp = "^[1-4]$", message = "Please enter the number of beds as a number between 1 and 4. Avoid using decimals, letters, or any other characters, including spaces.")
     @Column(name = "number_of_beds")
     private Integer numberOfBeds;
 
