@@ -3,9 +3,11 @@ package ro.fortech.academy.hotelmanagementapplication.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ro.fortech.academy.hotelmanagementapplication.controllers.request.ReservationPeriodRequest;
 import ro.fortech.academy.hotelmanagementapplication.controllers.request.ReservationRequest;
 import ro.fortech.academy.hotelmanagementapplication.controllers.response.GetAllReservationsResponse;
 import ro.fortech.academy.hotelmanagementapplication.entities.Reservation;
+import ro.fortech.academy.hotelmanagementapplication.entities.Room;
 import ro.fortech.academy.hotelmanagementapplication.services.ReservationService;
 
 import java.util.List;
@@ -25,6 +27,11 @@ public class ReservationController {
     @PostMapping
     public void createReservation(@RequestBody ReservationRequest requestBody) {
         reservationService.addReservation(requestBody);
+    }
+
+    @PostMapping("/free-period")
+    public ResponseEntity<List<Room>> reservationPeriodRequest(@RequestBody ReservationPeriodRequest requestBody) {
+        return ResponseEntity.ok(reservationService.findFreePeriodForReservation(requestBody));
     }
 
     @GetMapping("/{id}")

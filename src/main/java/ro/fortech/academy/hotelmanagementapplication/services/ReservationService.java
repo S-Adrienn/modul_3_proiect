@@ -3,11 +3,15 @@ package ro.fortech.academy.hotelmanagementapplication.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ro.fortech.academy.hotelmanagementapplication.controllers.request.ReservationPeriodRequest;
 import ro.fortech.academy.hotelmanagementapplication.controllers.request.ReservationRequest;
 import ro.fortech.academy.hotelmanagementapplication.entities.Reservation;
+import ro.fortech.academy.hotelmanagementapplication.entities.Room;
 import ro.fortech.academy.hotelmanagementapplication.repositories.ReservationRepository;
+import ro.fortech.academy.hotelmanagementapplication.repositories.RoomRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +19,12 @@ import java.util.Optional;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
 
+    private final RoomRepository roomRepository;
+
     @Autowired
-    public ReservationService(ReservationRepository reservationRepository) {
+    public ReservationService(ReservationRepository reservationRepository, RoomRepository roomRepository) {
         this.reservationRepository = reservationRepository;
+        this.roomRepository = roomRepository;
     }
 
     public void addReservation(ReservationRequest requestBody) {
@@ -102,4 +109,25 @@ public class ReservationService {
         return true;
     }
 
+    public List<Room> findFreePeriodForReservation(ReservationPeriodRequest requestBody) {
+        List<Room> availableRooms = roomRepository.findAll();
+        List<Reservation> reservationsInPeriod = getAllReservationsInConflict(requestBody);
+
+        for (Reservation reservation : reservationsInPeriod) {
+            availableRooms.removeIf(room -> room.getId().equals(reservation.getRoomId()));
+        }
+        return availableRooms;
+    }
+
+    private List<Reservation> getAllReservationsInConflict(ReservationPeriodRequest requestBody) {
+        List<Reservation> reservations = reservationRepository.findAll();
+        List<Reservation> reservationsInConflict = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getDateOfCheckIn().isBefore(requestBody.getDateOfCheckOut())
+                    && reservation.getDateOfCheckOut().isAfter(requestBody.getDateOfCheckIn())) {
+                reservationsInConflict.add(reservation);
+            }
+        }
+        return reservationsInConflict;
+    }
 }
