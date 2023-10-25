@@ -1,6 +1,7 @@
 package ro.fortech.academy.hotelmanagementapplication.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
@@ -13,34 +14,39 @@ public class Reservation {
     @Column(name = "id")
     private Long id;
 
+    //ha van datepicker, akkor nem kell regex?
     @Column(name = "date_of_check_in")
     private LocalDate dateOfCheckIn;
 
     @Column(name = "date_of_check_out")
     private LocalDate dateOfCheckOut;
-
+    @Pattern(regexp = "^[A-Za-z\\-]+$", message = "Please enter a valid name. Your name should only contain letters and may include hyphens between parts, but it cannot be empty or contain numbers or other characters.")
     @Column(name = "guest_name")
     private String guestName;
-
-    @Column (name = "phone_number")
+    @Pattern(regexp = "^\\+?[0-9]+$", message = "Please enter a valid phone number. The phone number should only contain numbers and may include a leading '+' sign for country code, but no other characters are allowed.")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column (name = "total_price")
+    @Column(name = "total_price")
     private Double totalPrice;
 
-    @Column (name = "room_id")
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
+    @Column(name = "room_id")
     private Long roomId;
 
     public Reservation() {
     }
 
-    public Reservation(Long id, LocalDate dateOfCheckIn, LocalDate dateOfCheckOut, String guestName, String phoneNumber, Double totalPrice, Long roomId) {
+    public Reservation(Long id, LocalDate dateOfCheckIn, LocalDate dateOfCheckOut, String guestName, String phoneNumber, Double totalPrice, Boolean isDeleted, Long roomId) {
         this.id = id;
         this.dateOfCheckIn = dateOfCheckIn;
         this.dateOfCheckOut = dateOfCheckOut;
         this.guestName = guestName;
         this.phoneNumber = phoneNumber;
         this.totalPrice = totalPrice;
+        this.isDeleted = isDeleted;
         this.roomId = roomId;
     }
 
@@ -90,6 +96,14 @@ public class Reservation {
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public Long getRoomId() {
