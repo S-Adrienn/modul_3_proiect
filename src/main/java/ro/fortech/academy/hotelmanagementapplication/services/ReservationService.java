@@ -30,7 +30,6 @@ public class ReservationService {
     public void addReservation(ReservationRequest requestBody) {
         Reservation newReservation = new Reservation();
         validateCheckInAndCheckOutDate(requestBody);
-        isValidNewReservationRequest(requestBody);
 
         newReservation.setDateOfCheckIn(requestBody.getDateOfCheckIn());
         newReservation.setDateOfCheckOut(requestBody.getDateOfCheckOut());
@@ -53,6 +52,7 @@ public class ReservationService {
     @Transactional
     public Reservation updateReservation(Long id, ReservationRequest requestBody) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow();
+        isValidReservationUpdate(requestBody);
 
         reservation.setDateOfCheckIn(requestBody.getDateOfCheckIn());
         reservation.setDateOfCheckOut(requestBody.getDateOfCheckOut());
@@ -95,13 +95,13 @@ public class ReservationService {
     private boolean isValidReservation(Reservation existentReservation, ReservationRequest newReservationRequest) {
         if (existentReservation.getDateOfCheckIn().isBefore(newReservationRequest.getDateOfCheckOut())
                 && existentReservation.getDateOfCheckOut().isAfter(newReservationRequest.getDateOfCheckIn()))
-            throw new IllegalArgumentException("The room is not available for the selected period.");
+            throw new IllegalArgumentException("This room is not available for the selected period. If you still want to make a reservation for this date, please delete your current reservation and create a new one in one of our available rooms.");
         else {
             return true;
         }
     }
 
-    private boolean isValidNewReservationRequest(ReservationRequest request) {
+    private boolean isValidReservationUpdate(ReservationRequest request) {
         Reservation existentReservation = findExistentReservation(request);
         if (existentReservation != null) {
             return isValidReservation(existentReservation, request);
