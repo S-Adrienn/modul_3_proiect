@@ -1,6 +1,7 @@
 package ro.fortech.academy.hotelmanagementapplication.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
@@ -14,7 +15,6 @@ public class Reservation {
     @Column(name = "id")
     private Long id;
 
-    //ha van datepicker, akkor nem kell regex?
     @Column(name = "date_of_check_in")
     private LocalDate dateOfCheckIn;
 

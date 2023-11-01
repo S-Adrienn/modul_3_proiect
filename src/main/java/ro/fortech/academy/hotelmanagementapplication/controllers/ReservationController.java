@@ -1,7 +1,9 @@
 package ro.fortech.academy.hotelmanagementapplication.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ro.fortech.academy.hotelmanagementapplication.controllers.request.ReservationPeriodRequest;
 import ro.fortech.academy.hotelmanagementapplication.controllers.request.ReservationRequest;
@@ -13,6 +15,7 @@ import ro.fortech.academy.hotelmanagementapplication.services.ReservationService
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Validated
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/reservations")
@@ -25,7 +28,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public void createReservation(@RequestBody ReservationRequest requestBody) {
+    public void createReservation(@Valid @RequestBody ReservationRequest requestBody) {
         reservationService.addReservation(requestBody);
     }
 
@@ -43,6 +46,11 @@ public class ReservationController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/guest-reservations/{guestName}")
+    public  ResponseEntity<List<Reservation>> getReservationsByGuestName(@PathVariable String guestName) {
+        List<Reservation> reservationsByGuestName = reservationService.getReservationsByGuestName(guestName);
+        return ResponseEntity.ok(reservationsByGuestName);
+    }
 
     @GetMapping
     public ResponseEntity<GetAllReservationsResponse> getAllReservations() {
@@ -52,7 +60,7 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Reservation> updateReservation(@PathVariable Long id, @RequestBody ReservationRequest requestBody) {
+    public ResponseEntity<Reservation> updateReservation(@Valid @PathVariable Long id, @RequestBody ReservationRequest requestBody) {
         try {
             Reservation responseBody = reservationService.updateReservation(id, requestBody);
             return ResponseEntity.ok(responseBody);
