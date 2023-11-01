@@ -30,7 +30,7 @@ public class RoomController {
         newRoom.setVisible(true);
         roomService.addRoom(newRoom);
     }
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
         try {
             Room responseBody = roomService.getRoomById(id);
@@ -46,6 +46,12 @@ public class RoomController {
 //        GetAllRoomsResponse responseBody = new GetAllRoomsResponse(rooms);
         return ResponseEntity.ok(rooms);
     }
+
+    @GetMapping("/price-per-night/{id}")
+    public ResponseEntity<Double> getPricePerNightByRoomId(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.getPricePerNightByRoomId(id));
+    }
+
     @PutMapping("{id}")
     public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody RoomRequest requestBody) {
         try {

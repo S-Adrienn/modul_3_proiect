@@ -45,4 +45,9 @@ public class RoomService {
         room.setVisible(false);
         return room;
     }
+
+    public Double getPricePerNightByRoomId(Long id) {
+        Room room = roomRepository.findById(id).orElseThrow();
+        return room.getRoomPricePerNight();
+    }
 }
