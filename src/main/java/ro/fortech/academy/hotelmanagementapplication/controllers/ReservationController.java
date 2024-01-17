@@ -15,7 +15,7 @@ import ro.fortech.academy.hotelmanagementapplication.services.ReservationService
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@Validated
+//@Validated
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/reservations")
@@ -28,7 +28,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public void createReservation(@Valid @RequestBody ReservationRequest requestBody) {
+    public void createReservation( @RequestBody ReservationRequest requestBody) {
         reservationService.addReservation(requestBody);
     }
 
@@ -60,7 +60,7 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Reservation> updateReservation(@Valid @PathVariable Long id, @RequestBody ReservationRequest requestBody) {
+    public ResponseEntity<Reservation> updateReservation( @PathVariable Long id, @RequestBody ReservationRequest requestBody) {
         try {
             Reservation responseBody = reservationService.updateReservation(id, requestBody);
             return ResponseEntity.ok(responseBody);

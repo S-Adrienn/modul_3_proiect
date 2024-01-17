@@ -7,15 +7,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 public class ReservationRequest {
-    @NotNull(message = "The check-in date field can not be empty!")
+//    @NotNull(message = "The check-in date field can not be empty!")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateOfCheckIn;
-    @NotNull(message = "The check-in date field can not be empty!")
+//    @NotNull(message = "The check-in date field can not be empty!")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateOfCheckOut;
-    @NotBlank (message = "The guest name field can not be empty!")
+//    @NotBlank (message = "The guest name field can not be empty!")
     private String guestName;
-    @NotBlank (message = "The phone number field can not be empty!")
+//    @NotBlank (message = "The phone number field can not be empty!")
     private String phoneNumber;
     private String totalPrice;
     private String roomId;

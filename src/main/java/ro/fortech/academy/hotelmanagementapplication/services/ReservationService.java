@@ -36,16 +36,12 @@ public class ReservationService {
         newReservation.setGuestName(requestBody.getGuestName());
         newReservation.setPhoneNumber(requestBody.getPhoneNumber());
 
-        //ezt kulon metodusba
-        String totalPriceString = requestBody.getTotalPrice();
-        Double totalPrice = Double.parseDouble(totalPriceString);
+        Double totalPrice = Double.parseDouble(requestBody.getTotalPrice());
         newReservation.setTotalPrice(totalPrice);
 
         newReservation.setDeleted(false);
 
-        //ez is kulon
-        String roomIdString = requestBody.getRoomId();
-        Long roomId = Long.parseLong(roomIdString);
+        Long roomId = Long.parseLong(requestBody.getRoomId());
         newReservation.setRoomId(roomId);
 
         reservationRepository.save(newReservation);
@@ -150,18 +146,19 @@ public class ReservationService {
         return true;
     }
 
+    //available room list
     public List<Room> findFreePeriodForReservation(ReservationPeriodRequest requestBody) {
         validateCheckInAndCheckOutDate(requestBody);
-        List<Room> availableRooms = roomRepository.findAll();
+        List<Room> roomList = roomRepository.findAll();
         List<Reservation> reservationsInPeriod = getAllReservationsInConflict(requestBody);
 
         for (Reservation reservation : reservationsInPeriod) {
-            availableRooms.removeIf(room -> room.getId().equals(reservation.getRoomId()));
+            roomList.removeIf(room -> room.getId().equals(reservation.getRoomId()));
         }
-        if (availableRooms.isEmpty()) {
+        if (roomList.isEmpty()) {
             throw new IllegalArgumentException("There are no available rooms for this period. Please choose another date.");
         }
-        return availableRooms;
+        return roomList;
     }
 
     private List<Reservation> getAllReservationsInConflict(ReservationPeriodRequest requestBody) {
